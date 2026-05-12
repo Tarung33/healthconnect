@@ -1,105 +1,161 @@
-# A2Z HealthConnect 🏥
+# 🏥 A2Z HealthConnect
 
-**AI-powered multilingual telemedicine app for rural India**
+> **AI-powered multilingual telemedicine platform for rural India**
 
-Built with Flutter, optimized for low-end Android devices and poor internet connectivity.
+[![Flutter](https://img.shields.io/badge/Flutter-3.2+-02569B?logo=flutter)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.2+-0175C2?logo=dart)](https://dart.dev)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20Web-orange)]()
 
-## Features
+A production-ready healthcare app designed for **rural India** — optimized for low-end devices, unreliable networks, and multilingual accessibility.
 
-- 🩺 **Doctor Consultation** — Browse & book video/voice calls with doctors
-- 🧠 **AI Symptom Checker** — Select symptoms, get AI-powered health guidance
-- 📁 **Offline Records** — Save health records locally, sync when online
-- 💊 **Medicine Availability** — Check nearby pharmacy stock & prices
-- 🌐 **Multilingual** — English, Hindi (हिंदी), Kannada (ಕನ್ನಡ)
-- 🌙 **Dark/Light Mode** — Theme toggle with persistence
-- 📴 **Offline-First** — Works without internet, shows connectivity status
-- 🔐 **Aadhaar/ABHA Login** — Mock government ID-based authentication
+---
 
-## Tech Stack
+## ✨ Features
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | Flutter (Dart) |
-| State Management | Provider |
-| Local Storage | SharedPreferences |
-| Network | http package |
-| Connectivity | connectivity_plus |
-| Typography | Google Fonts (Inter) |
-| Backend (planned) | Node.js + Express |
+| Feature | Description |
+|---------|-------------|
+| 📹 **Doctor Consultation** | Browse & book doctors for video/voice consultations |
+| 🧠 **AI Symptom Checker** | AI-powered health assessment from symptom selection |
+| 📋 **Offline Records** | Health records stored locally in SQLite |
+| 💊 **Medicine Search** | Search medicine availability at nearby stores |
+| 🎙️ **Voice EMR** | Voice-to-EMR generation for doctors |
+| 🌐 **Multilingual** | English, Hindi, Punjabi, Kannada |
+| 🌙 **Dark Mode** | Full dark/light theme support |
+| 📡 **Offline-First** | Works without internet, syncs when online |
+| ♿ **Accessible** | 48dp touch targets, large fonts, screen reader support |
 
-## Mock User for Testing
+---
 
-| Field | Value |
-|-------|-------|
-| Name | Rajesh Kumar |
-| Phone | +91 9876543210 |
-| Aadhaar | 1234 5678 9012 |
-| ABHA ID | 12-3456-7890-1234 |
-| OTP | Any 6-digit number (e.g., 123456) |
+## 🏗️ Architecture
 
-## Getting Started
+```
+┌────────────────────────────────────────┐
+│              UI Layer                  │
+│  (Screens + Widgets + Animations)      │
+├────────────────────────────────────────┤
+│           State Management             │
+│        (Provider + ChangeNotifier)     │
+├────────────────────────────────────────┤
+│          Repository Layer              │
+│    (Data access abstraction)           │
+├──────────────────┬─────────────────────┤
+│   Local Storage  │   Remote API        │
+│   (SQLite + SP)  │  (HTTP + Retry)     │
+├──────────────────┴─────────────────────┤
+│         Core Infrastructure            │
+│  ErrorBoundary | RetrySystem | Cache   │
+└────────────────────────────────────────┘
+```
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
+- Flutter SDK >= 3.2.0
+- Dart SDK >= 3.2.0
+- Android Studio / VS Code
 
-1. Install [Flutter SDK](https://docs.flutter.dev/get-started/install)
-2. Verify installation: `flutter doctor`
-
-### Run the App
-
+### Setup
 ```bash
-# Navigate to project directory
-cd a2z_healthconnect
+# Clone the repository
+git clone https://github.com/Tarung33/healthconnect.git
+cd healthconnect
 
-# Get dependencies
+# Install dependencies
 flutter pub get
 
-# Run on connected device or emulator
+# Run the app
 flutter run
 ```
 
-### Build APK
-
+### Build for Production
 ```bash
-flutter build apk --release
+# Split APK (smallest size, recommended)
+flutter build apk --split-per-abi --release \
+  --obfuscate --split-debug-info=build/debug-info
+
+# App Bundle for Play Store
+flutter build appbundle --release
 ```
 
-## Project Structure
+---
+
+## 📁 Project Structure
 
 ```
 lib/
-├── main.dart                    # Entry point
-├── app.dart                     # MaterialApp setup
-├── config/                      # Theme, colors, routes, constants
-├── l10n/                        # Localization (EN, HI, KN)
-├── models/                      # Data models
-├── services/                    # API, auth, storage, connectivity
-├── providers/                   # State management (Provider)
-├── screens/                     # All app screens
-└── widgets/                     # Reusable UI components
+├── main.dart               # Entry point (crash-safe)
+├── app.dart                # Root MaterialApp
+├── core/                   # Production infrastructure
+│   ├── error_boundary.dart
+│   ├── retry_system.dart
+│   ├── crash_safe_storage.dart
+│   ├── page_transitions.dart
+│   ├── performance_utils.dart
+│   └── accessibility_helpers.dart
+├── config/                 # App configuration
+├── l10n/                   # 4 language translations
+├── models/                 # Data models (10)
+├── providers/              # State management (4)
+├── repositories/           # Data access (5)
+├── services/               # Business logic (13)
+├── screens/                # UI screens (16)
+└── widgets/                # Reusable components (11)
 ```
 
-## API Integration Points
+---
 
-The app includes placeholder integration points marked with `// TODO:` comments:
+## 🔌 API Integration
 
-| Endpoint | File | Purpose |
-|----------|------|---------|
-| `POST /auth/send-otp` | `auth_service.dart` | Send OTP to phone |
-| `POST /auth/verify-otp` | `auth_service.dart` | Verify OTP |
-| `POST /auth/verify-aadhaar` | `auth_service.dart` | Aadhaar verification |
-| `GET /api/doctors` | `doctor_consultation_screen.dart` | List doctors |
-| `POST /api/symptom-check` | `symptom_checker_screen.dart` | AI symptom analysis |
-| `GET /api/medicines` | `medicine_screen.dart` | Medicine availability |
-
-## Navigation Flow
-
-```
-Splash → Onboarding → Language Selection → Login → Home (Bottom Nav)
-                                              ↓
-                              ┌────────┬──────┴──────┬──────────┐
-                              Home   Consult    AI Check    Records   Profile
+Update the base URL in `lib/config/app_constants.dart`:
+```dart
+static const String baseUrl = 'https://your-api-server.com/api';
 ```
 
-## License
+See `deployment_guide.md` for full API endpoint documentation.
 
-This project is for educational and demonstration purposes.
+---
+
+## 🛡️ Production Features
+
+- **Error Boundaries** — Every route wrapped for crash protection
+- **Retry System** — Exponential backoff for API calls (1s → 2s → 4s)
+- **Crash-Safe Storage** — Write-ahead backup + corruption recovery
+- **Background Sync** — Auto-sync every 5 minutes when online
+- **Performance Optimized** — Image cache limits, deferred loading
+- **Accessibility** — WCAG-compliant, 48dp touch targets, semantics
+
+---
+
+## 🌐 Supported Languages
+
+| Language | Code | Coverage |
+|----------|------|----------|
+| English | `en` | 100% |
+| Hindi | `hi` | 100% |
+| Punjabi | `pa` | 100% |
+| Kannada | `kn` | 100% |
+
+---
+
+## 📊 Performance Targets
+
+| Metric | Target |
+|--------|--------|
+| APK Size (arm64) | < 20 MB |
+| Cold Start | < 3 seconds |
+| Min Android | 8.0 (API 26) |
+| Min RAM | 2 GB |
+| Offline Support | Full |
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+**Built with ❤️ for rural India** 🇮🇳

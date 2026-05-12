@@ -3,6 +3,7 @@
 /// ============================================================
 
 const Map<String, String> hi = {
+  // ── General ──
   'app_name': 'A2Z हेल्थकनेक्ट',
   'app_tagline': 'स्वास्थ्य सेवा आपकी उंगलियों पर',
   'continue_btn': 'जारी रखें',
@@ -17,9 +18,26 @@ const Map<String, String> hi = {
   'ok': 'ठीक',
   'yes': 'हाँ',
   'no': 'नहीं',
+  'close': 'बंद करें',
+  'delete': 'हटाएं',
+  'edit': 'संपादित करें',
+  'done': 'हो गया',
+  'error': 'त्रुटि',
+  'success': 'सफल',
+  'warning': 'चेतावनी',
+  'confirm': 'पुष्टि करें',
+  'submit': 'जमा करें',
+  'update': 'अपडेट करें',
+  'all': 'सभी',
+  'found': 'मिले',
+
+  // ── Connectivity ──
   'online': 'ऑनलाइन',
   'offline': 'आप ऑफ़लाइन हैं। डेटा स्थानीय रूप से सहेजा गया।',
   'offline_short': 'ऑफ़लाइन',
+  'synced_online': 'ऑनलाइन सिंक किया गया',
+
+  // ── Onboarding ──
   'onboarding_title_1': 'डॉक्टर से जुड़ें',
   'onboarding_desc_1': 'अपने गाँव से वीडियो या वॉइस कॉल के माध्यम से डॉक्टरों से परामर्श करें।',
   'onboarding_title_2': 'AI स्वास्थ्य सहायक',
@@ -27,8 +45,13 @@ const Map<String, String> hi = {
   'onboarding_title_3': 'ऑफ़लाइन काम करता है',
   'onboarding_desc_3': 'इंटरनेट के बिना भी अपने स्वास्थ्य रिकॉर्ड प्राप्त करें।',
   'get_started': 'शुरू करें',
+
+  // ── Language Selection ──
   'select_language': 'अपनी भाषा चुनें',
   'select_language_desc': 'वह भाषा चुनें जिसमें आप सहज हैं',
+  'language_changed': 'भाषा बदली गई',
+
+  // ── Login / Register ──
   'login': 'लॉगिन',
   'register': 'रजिस्टर',
   'phone_number': 'फ़ोन नंबर',
@@ -41,6 +64,11 @@ const Map<String, String> hi = {
   'login_with_aadhaar': 'आधार / ABHA ID से जारी रखें',
   'create_account': 'खाता नहीं है? रजिस्टर करें',
   'have_account': 'पहले से खाता है? लॉगिन करें',
+  'invalid_otp': 'अमान्य OTP',
+  'invalid_phone': 'अमान्य फ़ोन नंबर',
+  'mock_otp_hint': 'मॉक OTP: 123456',
+
+  // ── Aadhaar Login ──
   'aadhaar_login': 'आधार / स्वास्थ्य ID लॉगिन',
   'aadhaar_number': 'आधार नंबर',
   'enter_aadhaar': '12 अंकों का आधार नंबर दर्ज करें',
@@ -48,6 +76,9 @@ const Map<String, String> hi = {
   'enter_abha': 'अपना ABHA ID दर्ज करें',
   'verify_identity': 'पहचान सत्यापित करें',
   'aadhaar_note': 'आपका आधार डेटा सुरक्षित और एन्क्रिप्टेड है',
+  'verification_failed': 'सत्यापन विफल। कृपया अपने विवरण जाँचें।',
+
+  // ── Home Dashboard ──
   'good_morning': 'सुप्रभात',
   'good_afternoon': 'नमस्कार',
   'good_evening': 'शुभ संध्या',
@@ -61,11 +92,21 @@ const Map<String, String> hi = {
   'no_appointments': 'कोई आगामी अपॉइंटमेंट नहीं',
   'health_tips': 'स्वास्थ्य सुझाव',
   'book_appointment': 'अपॉइंटमेंट बुक करें',
+
+  // ── Health Tips ──
+  'health_tip_water': 'रोज़ 8 गिलास पानी पियें',
+  'health_tip_walk': 'हर दिन 30 मिनट पैदल चलें',
+  'health_tip_fruits': 'मौसमी फल और सब्ज़ियाँ खाएं',
+  'health_tip_sleep': '7-8 घंटे की नींद लें',
+
+  // ── Bottom Navigation ──
   'nav_home': 'होम',
   'nav_consult': 'परामर्श',
   'nav_ai_check': 'AI जाँच',
   'nav_records': 'रिकॉर्ड',
   'nav_profile': 'प्रोफ़ाइल',
+
+  // ── Doctor Consultation ──
   'available_doctors': 'उपलब्ध डॉक्टर',
   'specialization': 'विशेषज्ञता',
   'experience': 'अनुभव',
@@ -81,6 +122,10 @@ const Map<String, String> hi = {
   'pediatrician': 'बाल रोग विशेषज्ञ',
   'gynecologist': 'स्त्री रोग विशेषज्ञ',
   'dermatologist': 'त्वचा विशेषज्ञ',
+  'no_doctors_found': 'कोई डॉक्टर नहीं मिला',
+  'booking_with': 'बुकिंग',
+
+  // ── AI Symptom Checker ──
   'symptom_checker': 'AI लक्षण जांचक',
   'symptom_checker_desc': 'AI मार्गदर्शन के लिए अपने लक्षण चुनें',
   'select_symptoms': 'लक्षण चुनें',
@@ -88,7 +133,7 @@ const Map<String, String> hi = {
   'selected_symptoms': 'चयनित लक्षण',
   'check_now': 'अभी जांचें',
   'ai_result': 'AI मूल्यांकन',
-  'ai_disclaimer': 'यह केवल AI मार्गदर्शन है। कृपया डॉक्टर से परामर्श करें।',
+  'ai_disclaimer': 'यह केवल AI मार्गदर्शन है। सटीक निदान के लिए कृपया डॉक्टर से परामर्श करें।',
   'fever': 'बुखार',
   'headache': 'सिरदर्द',
   'cough': 'खांसी',
@@ -105,6 +150,19 @@ const Map<String, String> hi = {
   'joint_pain': 'जोड़ों का दर्द',
   'dizziness': 'चक्कर आना',
   'loss_of_appetite': 'भूख न लगना',
+
+  // ── AI Results (mock) ──
+  'ai_result_severe': 'आपके लक्षणों के आधार पर, यह वायरल संक्रमण हो सकता है। '
+      'कृपया 24 घंटे के भीतर डॉक्टर से परामर्श करें। पानी पिएं और आराम करें। '
+      'यदि सांस लेने में कठिनाई हो, तो तुरंत चिकित्सा सहायता लें।',
+  'ai_result_moderate': 'आपके लक्षण सामान्य सर्दी या हल्के संक्रमण का संकेत देते हैं। '
+      'आराम करें, गर्म पेय पदार्थ पिएं, और 2-3 दिन निगरानी रखें। '
+      'यदि लक्षण बिगड़ें, तो कृपया डॉक्टर से परामर्श करें।',
+  'ai_result_mild': 'आपका लक्षण हल्का प्रतीत होता है। अगले '
+      '24-48 घंटों में बदलाव पर ध्यान दें। अच्छी स्वच्छता बनाए रखें और पानी पिएं। '
+      'यदि स्थिति बनी रहे तो डॉक्टर से परामर्श करें।',
+
+  // ── Offline Records ──
   'health_records': 'स्वास्थ्य रिकॉर्ड',
   'saved_offline': 'ऑफ़लाइन सहेजा गया',
   'prescriptions': 'नुस्खे',
@@ -115,6 +173,10 @@ const Map<String, String> hi = {
   'record_date': 'तारीख',
   'record_doctor': 'डॉक्टर',
   'record_diagnosis': 'निदान',
+  'notes': 'नोट्स',
+  'add_record_coming_soon': 'रिकॉर्ड जोड़ने की सुविधा जल्द आ रही है',
+
+  // ── Medicine Availability ──
   'medicine_availability': 'दवा उपलब्धता',
   'search_medicine': 'दवा का नाम खोजें',
   'nearby_stores': 'नज़दीकी दुकानें',
@@ -124,6 +186,9 @@ const Map<String, String> hi = {
   'generic_available': 'जेनेरिक उपलब्ध',
   'store_name': 'दुकान का नाम',
   'distance': 'दूरी',
+  'no_medicines_found': 'कोई दवा नहीं मिली',
+
+  // ── Profile ──
   'profile': 'प्रोफ़ाइल',
   'edit_profile': 'प्रोफ़ाइल संपादित करें',
   'full_name': 'पूरा नाम',
@@ -137,4 +202,21 @@ const Map<String, String> hi = {
   'about': 'के बारे में',
   'logout': 'लॉगआउट',
   'version': 'संस्करण',
+  'notifications_coming_soon': 'सूचना सेटिंग जल्द आ रही हैं',
+  'help_coming_soon': 'सहायता और समर्थन जल्द आ रही है',
+  'logout_confirm': 'क्या आप लॉगआउट करना चाहते हैं?',
+  'logout_confirm_desc': 'आपको फिर से लॉगिन करना होगा।',
+
+  // ── Error Boundary & Recovery ──
+  'something_went_wrong': 'कुछ गलत हो गया',
+  'error_try_again': 'एक अप्रत्याशित त्रुटि हुई। कृपया पुनः प्रयास करें।',
+  'no_internet': 'कोई इंटरनेट कनेक्शन नहीं',
+  'connection_restored': 'कनेक्शन बहाल हुआ',
+  'syncing_data': 'डेटा सिंक हो रहा है...',
+  'sync_complete': 'सिंक पूर्ण',
+  'sync_failed': 'सिंक विफल। बाद में पुनः प्रयास करेंगे।',
+  'data_saved_locally': 'डेटा स्थानीय रूप से सहेजा गया',
+  'tap_to_retry': 'पुनः प्रयास करने के लिए टैप करें',
+  'page_not_found': 'पेज नहीं मिला',
+  'go_home': 'होम जाएं',
 };

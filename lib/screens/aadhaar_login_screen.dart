@@ -52,7 +52,7 @@ class _AadhaarLoginScreenState extends State<AadhaarLoginScreen> {
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Verification failed. Please check your details.'),
+          content: Text(t('verification_failed')),
           backgroundColor: AppColors.error,
         ),
       );

@@ -29,6 +29,14 @@ class AppTheme {
       cardColor: AppColors.cardLight,
       dividerColor: AppColors.dividerLight,
 
+      // ── Smooth Transitions ──
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
+
       // ── Typography — larger for accessibility ──
       textTheme: _buildTextTheme(Brightness.light),
 
@@ -135,6 +143,14 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.backgroundDark,
       cardColor: AppColors.cardDark,
       dividerColor: AppColors.dividerDark,
+
+      // ── Smooth Transitions ──
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
 
       textTheme: _buildTextTheme(Brightness.dark),
 

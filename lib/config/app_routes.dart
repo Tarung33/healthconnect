@@ -16,4 +16,5 @@ class AppRoutes {
   static const String offlineRecords = '/offline-records';
   static const String medicineAvailability = '/medicine-availability';
   static const String profile = '/profile';
+  static const String adminDashboard = '/admin-dashboard';
 }

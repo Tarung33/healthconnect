@@ -1,8 +1,10 @@
-import 'storage_service.dart';
-import '../l10n/app_localizations.dart';
+import 'translation_service.dart';
 
 /// ============================================================
 /// LOCALIZATION SERVICE — Language persistence & switching
+/// ============================================================
+/// Thin wrapper around TranslationService for backward
+/// compatibility. New code should use TranslationService directly.
 /// ============================================================
 
 class LocalizationService {
@@ -10,20 +12,23 @@ class LocalizationService {
   factory LocalizationService() => _instance;
   LocalizationService._internal();
 
-  final StorageService _storage = StorageService();
+  final TranslationService _translationService = TranslationService();
 
   /// Load saved language preference on app start
   Future<void> loadSavedLanguage() async {
-    final langCode = await _storage.getLanguage();
-    AppLocalizations.setLanguage(langCode);
+    await _translationService.loadSavedLanguage();
   }
 
   /// Change language and persist
   Future<void> changeLanguage(String languageCode) async {
-    AppLocalizations.setLanguage(languageCode);
-    await _storage.setLanguage(languageCode);
+    await _translationService.changeLanguage(languageCode);
   }
 
   /// Get current language code
-  String get currentLanguage => AppLocalizations.currentLanguage;
+  String get currentLanguage => _translationService.currentLanguage;
+
+  /// Try to auto-detect device locale
+  Future<String> detectDeviceLocale() async {
+    return await _translationService.detectAndApplyDeviceLocale();
+  }
 }

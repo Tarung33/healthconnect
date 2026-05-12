@@ -60,7 +60,7 @@ class DoctorCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    doctor.isAvailable ? '● Online' : '● Offline',
+                    doctor.isAvailable ? '● ${t('online')}' : '● ${t('offline_short')}',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,

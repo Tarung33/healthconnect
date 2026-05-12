@@ -1,96 +1,171 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../config/app_constants.dart';
+import '../core/retry_system.dart';
 
 /// ============================================================
-/// API SERVICE — HTTP client with offline fallback
+/// API SERVICE — HTTP client with retry & offline fallback
 /// ============================================================
-/// All network requests go through this service. When offline,
-/// it returns cached data or throws a clear error that the UI
-/// layer can handle gracefully.
+/// All network requests go through this service. Includes:
+///   • Exponential backoff retry for failed requests
+///   • Timeout handling for slow rural networks
+///   • Structured error responses via Result type
+///   • Request/response logging in debug mode
 /// ============================================================
 
-class ApiService {
+class ApiService with RetryMixin {
   static final ApiService _instance = ApiService._internal();
   factory ApiService() => _instance;
   ApiService._internal();
 
   final String _baseUrl = AppConstants.baseUrl;
-  const Duration _timeout = Duration(seconds: AppConstants.apiTimeout);
+  final Duration _timeout = const Duration(seconds: AppConstants.apiTimeout);
 
-  /// ── GET request ──
-  /// TODO: Connect to your Node.js + Express backend
+  /// Standard headers for all requests
+  Map<String, String> get _headers => {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-App-Version': AppConstants.appVersion,
+      };
+
+  /// ── GET request with retry ──
   Future<Map<String, dynamic>> get(String endpoint) async {
-    try {
-      final response = await http
-          .get(Uri.parse('$_baseUrl$endpoint'))
-          .timeout(_timeout);
-
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
-      } else {
-        throw ApiException('Server error: ${response.statusCode}');
-      }
-    } on TimeoutException {
-      throw ApiException('Connection timed out. Please check your internet.');
-    } catch (e) {
-      throw ApiException('Network error: $e');
-    }
+    return RetrySystem.execute(
+      maxRetries: 3,
+      initialDelay: const Duration(seconds: 1),
+      operation: () async {
+        _logRequest('GET', endpoint);
+        final response = await http
+            .get(Uri.parse('$_baseUrl$endpoint'), headers: _headers)
+            .timeout(_timeout);
+        return _handleResponse(response);
+      },
+      onRetry: (attempt, error, delay) {
+        debugPrint('API GET $endpoint: Retry $attempt after ${delay.inSeconds}s');
+      },
+    );
   }
 
-  /// ── POST request ──
+  /// ── POST request with retry ──
   Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> body) async {
-    try {
-      final response = await http
-          .post(
-            Uri.parse('$_baseUrl$endpoint'),
-            headers: {'Content-Type': 'application/json'},
-            body: json.encode(body),
-          )
-          .timeout(_timeout);
+    return RetrySystem.execute(
+      maxRetries: 2,
+      operation: () async {
+        _logRequest('POST', endpoint, body: body);
+        final response = await http
+            .post(
+              Uri.parse('$_baseUrl$endpoint'),
+              headers: _headers,
+              body: json.encode(body),
+            )
+            .timeout(_timeout);
+        return _handleResponse(response);
+      },
+    );
+  }
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return json.decode(response.body);
-      } else {
-        throw ApiException('Server error: ${response.statusCode}');
-      }
-    } on TimeoutException {
-      throw ApiException('Connection timed out.');
+  /// ── PUT request with retry ──
+  Future<Map<String, dynamic>> put(String endpoint, Map<String, dynamic> body) async {
+    return RetrySystem.execute(
+      maxRetries: 2,
+      operation: () async {
+        _logRequest('PUT', endpoint, body: body);
+        final response = await http
+            .put(
+              Uri.parse('$_baseUrl$endpoint'),
+              headers: _headers,
+              body: json.encode(body),
+            )
+            .timeout(_timeout);
+        return _handleResponse(response);
+      },
+    );
+  }
+
+  /// ── DELETE request ──
+  Future<Map<String, dynamic>> delete(String endpoint) async {
+    return RetrySystem.execute(
+      maxRetries: 1,
+      operation: () async {
+        _logRequest('DELETE', endpoint);
+        final response = await http
+            .delete(Uri.parse('$_baseUrl$endpoint'), headers: _headers)
+            .timeout(_timeout);
+        return _handleResponse(response);
+      },
+    );
+  }
+
+  /// ── Safe GET returning Result ──
+  Future<Result<Map<String, dynamic>>> safeGet(String endpoint) async {
+    try {
+      final data = await get(endpoint);
+      return Result.success(data);
+    } on ApiException catch (e) {
+      return Result.failure(e.message);
     } catch (e) {
-      throw ApiException('Network error: $e');
+      return Result.failure('Unexpected error: $e');
     }
   }
 
-  /// ── PUT request ──
-  Future<Map<String, dynamic>> put(String endpoint, Map<String, dynamic> body) async {
+  /// ── Safe POST returning Result ──
+  Future<Result<Map<String, dynamic>>> safePost(
+      String endpoint, Map<String, dynamic> body) async {
     try {
-      final response = await http
-          .put(
-            Uri.parse('$_baseUrl$endpoint'),
-            headers: {'Content-Type': 'application/json'},
-            body: json.encode(body),
-          )
-          .timeout(_timeout);
-
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
-      } else {
-        throw ApiException('Server error: ${response.statusCode}');
-      }
-    } on TimeoutException {
-      throw ApiException('Connection timed out.');
+      final data = await post(endpoint, body);
+      return Result.success(data);
+    } on ApiException catch (e) {
+      return Result.failure(e.message);
     } catch (e) {
-      throw ApiException('Network error: $e');
+      return Result.failure('Unexpected error: $e');
     }
+  }
+
+  /// Handle HTTP response
+  Map<String, dynamic> _handleResponse(http.Response response) {
+    _logResponse(response);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      if (response.body.isEmpty) return {};
+      return json.decode(response.body);
+    } else if (response.statusCode == 401) {
+      throw ApiException('Session expired. Please login again.', code: 401);
+    } else if (response.statusCode == 403) {
+      throw ApiException('Access denied.', code: 403);
+    } else if (response.statusCode == 404) {
+      throw ApiException('Resource not found.', code: 404);
+    } else if (response.statusCode == 429) {
+      throw ApiException('Too many requests. Please wait.', code: 429);
+    } else if (response.statusCode >= 500) {
+      throw ApiException('Server error. Please try again later.', code: response.statusCode);
+    } else {
+      throw ApiException('Request failed: ${response.statusCode}', code: response.statusCode);
+    }
+  }
+
+  void _logRequest(String method, String endpoint, {Map<String, dynamic>? body}) {
+    debugPrint('→ $method $_baseUrl$endpoint');
+    if (body != null) debugPrint('  Body: ${json.encode(body).substring(0, 200.clamp(0, json.encode(body).length))}');
+  }
+
+  void _logResponse(http.Response response) {
+    debugPrint('← ${response.statusCode} (${response.contentLength} bytes)');
   }
 }
 
-/// Custom exception for API errors
+/// Custom exception for API errors with status code
 class ApiException implements Exception {
   final String message;
-  ApiException(this.message);
+  final int? code;
+  ApiException(this.message, {this.code});
 
   @override
   String toString() => message;
+
+  bool get isNetworkError => code == null;
+  bool get isAuthError => code == 401 || code == 403;
+  bool get isServerError => code != null && code! >= 500;
+  bool get isRetryable => isNetworkError || isServerError || code == 429;
 }

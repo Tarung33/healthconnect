@@ -12,6 +12,9 @@ import '../widgets/input_field.dart';
 /// ============================================================
 /// LOGIN SCREEN — Phone + OTP based login/register
 /// ============================================================
+/// Login: phone → OTP → verify → home
+/// Register: name + phone + village → OTP → verify → home
+/// ============================================================
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,6 +26,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _phoneController = TextEditingController();
   final _otpController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _villageController = TextEditingController();
   bool _isLoginMode = true;
   bool _otpSent = false;
 
@@ -30,11 +36,30 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     _phoneController.dispose();
     _otpController.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _villageController.dispose();
     super.dispose();
   }
 
   Future<void> _sendOtp() async {
-    if (_phoneController.text.length != 10) return;
+    // Validate phone
+    if (_phoneController.text.length != 10) {
+      _showError(t('invalid_phone'));
+      return;
+    }
+
+    // Validate registration fields
+    if (!_isLoginMode) {
+      if (_nameController.text.trim().isEmpty) {
+        _showError('Please enter your full name');
+        return;
+      }
+      if (_nameController.text.trim().length < 2) {
+        _showError('Name must be at least 2 characters');
+        return;
+      }
+    }
 
     final auth = context.read<AuthProvider>();
     final success = await auth.sendOtp('+91${_phoneController.text}');
@@ -43,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => _otpSent = true);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${t('otp_sent')} (Mock OTP: 123456)'),
+          content: Text('${t('otp_sent')} (${t('mock_otp_hint')})'),
           backgroundColor: AppColors.success,
         ),
       );
@@ -51,6 +76,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _verifyOtp() async {
+    if (_otpController.text.length != 6) {
+      _showError(t('invalid_otp'));
+      return;
+    }
+
     final auth = context.read<AuthProvider>();
     final success = await auth.verifyOtp(
       '+91${_phoneController.text}',
@@ -60,15 +90,28 @@ class _LoginScreenState extends State<LoginScreen> {
     if (success && mounted) {
       Navigator.pushReplacementNamed(context, AppRoutes.home);
     } else if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: const Text('Invalid OTP'), backgroundColor: AppColors.error),
-      );
+      _showError(t('invalid_otp'));
     }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: AppColors.error),
+    );
+  }
+
+  void _toggleMode() {
+    setState(() {
+      _isLoginMode = !_isLoginMode;
+      _otpSent = false;
+      _otpController.clear();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
+    final theme = Theme.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -95,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 24),
               Center(
                 child: Text(t('app_name'),
-                  style: Theme.of(context).textTheme.headlineMedium),
+                  style: theme.textTheme.headlineMedium),
               ),
               const SizedBox(height: 40),
 
@@ -109,10 +152,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => setState(() {
-                          _isLoginMode = true;
-                          _otpSent = false;
-                        }),
+                        onTap: () {
+                          if (!_isLoginMode) _toggleMode();
+                        },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           decoration: BoxDecoration(
@@ -133,10 +175,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => setState(() {
-                          _isLoginMode = false;
-                          _otpSent = false;
-                        }),
+                        onTap: () {
+                          if (_isLoginMode) _toggleMode();
+                        },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           decoration: BoxDecoration(
@@ -160,7 +201,47 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 32),
 
-              // ── Phone Number ──
+              // ═══════════════════════════════════
+              // REGISTER-ONLY FIELDS
+              // ═══════════════════════════════════
+              if (!_isLoginMode && !_otpSent) ...[
+                // Full Name
+                InputField(
+                  label: t('full_name'),
+                  hint: 'Enter your full name',
+                  controller: _nameController,
+                  keyboardType: TextInputType.name,
+                  prefixIcon: Icons.person_outline,
+                  maxLength: 50,
+                ),
+                const SizedBox(height: 16),
+
+                // Email (optional)
+                InputField(
+                  label: '${t('email')} (optional)',
+                  hint: 'Enter your email address',
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  prefixIcon: Icons.email_outlined,
+                  maxLength: 100,
+                ),
+                const SizedBox(height: 16),
+
+                // Village
+                InputField(
+                  label: t('village'),
+                  hint: 'Enter your village or town',
+                  controller: _villageController,
+                  keyboardType: TextInputType.text,
+                  prefixIcon: Icons.location_on_outlined,
+                  maxLength: 100,
+                ),
+                const SizedBox(height: 16),
+              ],
+
+              // ═══════════════════════════════════
+              // PHONE NUMBER (both modes)
+              // ═══════════════════════════════════
               InputField(
                 label: t('phone_number'),
                 hint: t('enter_phone'),
@@ -172,7 +253,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 16),
 
-              // ── OTP Field (shown after sending) ──
+              // ═══════════════════════════════════
+              // OTP FIELD (shown after sending)
+              // ═══════════════════════════════════
               if (_otpSent) ...[
                 InputField(
                   label: t('enter_otp'),
@@ -182,7 +265,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   maxLength: 6,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 8),
+                // Hint text for mock OTP
+                Text(
+                  t('mock_otp_hint'),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: AppColors.textSecondaryLight,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                const SizedBox(height: 16),
               ],
 
               // ── Action Button ──
@@ -199,7 +291,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Expanded(child: Divider()),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(t('or'), style: Theme.of(context).textTheme.bodySmall),
+                    child: Text(t('or'), style: theme.textTheme.bodySmall),
                   ),
                   const Expanded(child: Divider()),
                 ],
@@ -215,6 +307,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.pushNamed(context, AppRoutes.aadhaarLogin);
                 },
               ),
+
+              // ── Bottom toggle text ──
+              const SizedBox(height: 24),
+              Center(
+                child: GestureDetector(
+                  onTap: _toggleMode,
+                  child: Text(
+                    _isLoginMode ? t('create_account') : t('have_account'),
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
             ],
           ),
         ),

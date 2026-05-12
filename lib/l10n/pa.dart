@@ -1,0 +1,222 @@
+/// ============================================================
+/// PUNJABI STRINGS — ਪੰਜਾਬੀ
+/// ============================================================
+
+const Map<String, String> pa = {
+  // ── General ──
+  'app_name': 'A2Z ਹੈਲਥਕਨੈਕਟ',
+  'app_tagline': 'ਸਿਹਤ ਸੇਵਾ ਤੁਹਾਡੀਆਂ ਉਂਗਲਾਂ \'ਤੇ',
+  'continue_btn': 'ਜਾਰੀ ਰੱਖੋ',
+  'skip': 'ਛੱਡੋ',
+  'next': 'ਅਗਲਾ',
+  'back': 'ਪਿੱਛੇ',
+  'save': 'ਸੰਭਾਲੋ',
+  'cancel': 'ਰੱਦ ਕਰੋ',
+  'search': 'ਖੋਜੋ',
+  'loading': 'ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...',
+  'retry': 'ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ',
+  'ok': 'ਠੀਕ ਹੈ',
+  'yes': 'ਹਾਂ',
+  'no': 'ਨਹੀਂ',
+  'close': 'ਬੰਦ ਕਰੋ',
+  'delete': 'ਮਿਟਾਓ',
+  'edit': 'ਸੰਪਾਦਿਤ ਕਰੋ',
+  'done': 'ਹੋ ਗਿਆ',
+  'error': 'ਗਲਤੀ',
+  'success': 'ਸਫ਼ਲ',
+  'warning': 'ਚੇਤਾਵਨੀ',
+  'confirm': 'ਪੁਸ਼ਟੀ ਕਰੋ',
+  'submit': 'ਜਮ੍ਹਾਂ ਕਰੋ',
+  'update': 'ਅੱਪਡੇਟ ਕਰੋ',
+  'all': 'ਸਭ',
+  'found': 'ਮਿਲੇ',
+
+  // ── Connectivity ──
+  'online': 'ਆਨਲਾਈਨ',
+  'offline': 'ਤੁਸੀਂ ਔਫ਼ਲਾਈਨ ਹੋ। ਡੇਟਾ ਸਥਾਨਕ ਤੌਰ \'ਤੇ ਸੰਭਾਲਿਆ ਗਿਆ।',
+  'offline_short': 'ਔਫ਼ਲਾਈਨ',
+  'synced_online': 'ਆਨਲਾਈਨ ਸਿੰਕ ਕੀਤਾ',
+
+  // ── Onboarding ──
+  'onboarding_title_1': 'ਡਾਕਟਰਾਂ ਨਾਲ ਜੁੜੋ',
+  'onboarding_desc_1': 'ਆਪਣੇ ਪਿੰਡ ਤੋਂ ਵੀਡੀਓ ਜਾਂ ਵੌਇਸ ਕਾਲ ਰਾਹੀਂ ਡਾਕਟਰਾਂ ਨਾਲ ਸਲਾਹ ਕਰੋ।',
+  'onboarding_title_2': 'AI ਸਿਹਤ ਸਹਾਇਕ',
+  'onboarding_desc_2': 'ਆਪਣੇ ਲੱਛਣ ਦੱਸੋ ਅਤੇ AI ਦੁਆਰਾ ਤੁਰੰਤ ਮਾਰਗਦਰਸ਼ਨ ਪ੍ਰਾਪਤ ਕਰੋ।',
+  'onboarding_title_3': 'ਔਫ਼ਲਾਈਨ ਕੰਮ ਕਰਦਾ ਹੈ',
+  'onboarding_desc_3': 'ਇੰਟਰਨੈੱਟ ਤੋਂ ਬਿਨਾਂ ਵੀ ਆਪਣੇ ਸਿਹਤ ਰਿਕਾਰਡ ਵੇਖੋ।',
+  'get_started': 'ਸ਼ੁਰੂ ਕਰੋ',
+
+  // ── Language Selection ──
+  'select_language': 'ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ',
+  'select_language_desc': 'ਉਹ ਭਾਸ਼ਾ ਚੁਣੋ ਜਿਸ ਵਿੱਚ ਤੁਸੀਂ ਅਰਾਮਦੇਹ ਹੋ',
+  'language_changed': 'ਭਾਸ਼ਾ ਬਦਲੀ ਗਈ',
+
+  // ── Login / Register ──
+  'login': 'ਲਾਗਿਨ',
+  'register': 'ਰਜਿਸਟਰ',
+  'phone_number': 'ਫ਼ੋਨ ਨੰਬਰ',
+  'enter_phone': '10 ਅੰਕਾਂ ਦਾ ਫ਼ੋਨ ਨੰਬਰ ਦਰਜ ਕਰੋ',
+  'send_otp': 'OTP ਭੇਜੋ',
+  'enter_otp': 'OTP ਦਰਜ ਕਰੋ',
+  'otp_sent': 'ਤੁਹਾਡੇ ਫ਼ੋਨ \'ਤੇ OTP ਭੇਜਿਆ ਗਿਆ',
+  'verify_otp': 'OTP ਤਸਦੀਕ ਕਰੋ',
+  'or': 'ਜਾਂ',
+  'login_with_aadhaar': 'ਆਧਾਰ / ABHA ID ਨਾਲ ਜਾਰੀ ਰੱਖੋ',
+  'create_account': 'ਖਾਤਾ ਨਹੀਂ ਹੈ? ਰਜਿਸਟਰ ਕਰੋ',
+  'have_account': 'ਪਹਿਲਾਂ ਤੋਂ ਖਾਤਾ ਹੈ? ਲਾਗਿਨ ਕਰੋ',
+  'invalid_otp': 'ਗਲਤ OTP',
+  'invalid_phone': 'ਗਲਤ ਫ਼ੋਨ ਨੰਬਰ',
+  'mock_otp_hint': 'ਮੌਕ OTP: 123456',
+
+  // ── Aadhaar Login ──
+  'aadhaar_login': 'ਆਧਾਰ / ਸਿਹਤ ID ਲਾਗਿਨ',
+  'aadhaar_number': 'ਆਧਾਰ ਨੰਬਰ',
+  'enter_aadhaar': '12 ਅੰਕਾਂ ਦਾ ਆਧਾਰ ਨੰਬਰ ਦਰਜ ਕਰੋ',
+  'abha_id': 'ABHA ਸਿਹਤ ID',
+  'enter_abha': 'ਆਪਣਾ ABHA ID ਦਰਜ ਕਰੋ',
+  'verify_identity': 'ਪਛਾਣ ਤਸਦੀਕ ਕਰੋ',
+  'aadhaar_note': 'ਤੁਹਾਡਾ ਆਧਾਰ ਡੇਟਾ ਸੁਰੱਖਿਅਤ ਅਤੇ ਐਨਕ੍ਰਿਪਟ ਹੈ',
+  'verification_failed': 'ਤਸਦੀਕ ਅਸਫ਼ਲ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਵੇਰਵੇ ਜਾਂਚੋ।',
+
+  // ── Home Dashboard ──
+  'good_morning': 'ਸ਼ੁਭ ਸਵੇਰ',
+  'good_afternoon': 'ਸ਼ੁਭ ਦੁਪਹਿਰ',
+  'good_evening': 'ਸ਼ੁਭ ਸ਼ਾਮ',
+  'welcome_back': 'ਵਾਪਸ ਆਉਣ \'ਤੇ ਜੀ ਆਇਆਂ ਨੂੰ',
+  'quick_actions': 'ਤੁਰੰਤ ਕਾਰਵਾਈਆਂ',
+  'consult_doctor': 'ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ',
+  'check_symptoms': 'ਲੱਛਣ ਜਾਂਚੋ',
+  'my_records': 'ਮੇਰੇ ਰਿਕਾਰਡ',
+  'medicines': 'ਦਵਾਈਆਂ',
+  'upcoming_appointments': 'ਆਉਣ ਵਾਲੀਆਂ ਮੁਲਾਕਾਤਾਂ',
+  'no_appointments': 'ਕੋਈ ਆਉਣ ਵਾਲੀ ਮੁਲਾਕਾਤ ਨਹੀਂ',
+  'health_tips': 'ਸਿਹਤ ਸੁਝਾਅ',
+  'book_appointment': 'ਮੁਲਾਕਾਤ ਬੁੱਕ ਕਰੋ',
+
+  // ── Health Tips ──
+  'health_tip_water': 'ਰੋਜ਼ਾਨਾ 8 ਗਲਾਸ ਪਾਣੀ ਪੀਓ',
+  'health_tip_walk': 'ਹਰ ਰੋਜ਼ 30 ਮਿੰਟ ਸੈਰ ਕਰੋ',
+  'health_tip_fruits': 'ਮੌਸਮੀ ਫਲ ਅਤੇ ਸਬਜ਼ੀਆਂ ਖਾਓ',
+  'health_tip_sleep': '7-8 ਘੰਟੇ ਦੀ ਨੀਂਦ ਲਓ',
+
+  // ── Bottom Navigation ──
+  'nav_home': 'ਹੋਮ',
+  'nav_consult': 'ਸਲਾਹ',
+  'nav_ai_check': 'AI ਜਾਂਚ',
+  'nav_records': 'ਰਿਕਾਰਡ',
+  'nav_profile': 'ਪ੍ਰੋਫ਼ਾਈਲ',
+
+  // ── Doctor Consultation ──
+  'available_doctors': 'ਉਪਲਬਧ ਡਾਕਟਰ',
+  'specialization': 'ਵਿਸ਼ੇਸ਼ਤਾ',
+  'experience': 'ਤਜਰਬਾ',
+  'years': 'ਸਾਲ',
+  'rating': 'ਰੇਟਿੰਗ',
+  'consultation_fee': 'ਸਲਾਹ ਫੀਸ',
+  'book_now': 'ਹੁਣੇ ਬੁੱਕ ਕਰੋ',
+  'video_call': 'ਵੀਡੀਓ ਕਾਲ',
+  'voice_call': 'ਵੌਇਸ ਕਾਲ',
+  'chat': 'ਚੈਟ',
+  'doctor_details': 'ਡਾਕਟਰ ਵੇਰਵੇ',
+  'general_physician': 'ਜਨਰਲ ਡਾਕਟਰ',
+  'pediatrician': 'ਬੱਚਿਆਂ ਦੇ ਡਾਕਟਰ',
+  'gynecologist': 'ਇਸਤਰੀ ਰੋਗ ਮਾਹਰ',
+  'dermatologist': 'ਚਮੜੀ ਮਾਹਰ',
+  'no_doctors_found': 'ਕੋਈ ਡਾਕਟਰ ਨਹੀਂ ਮਿਲਿਆ',
+  'booking_with': 'ਬੁਕਿੰਗ',
+
+  // ── AI Symptom Checker ──
+  'symptom_checker': 'AI ਲੱਛਣ ਜਾਂਚਕ',
+  'symptom_checker_desc': 'AI ਮਾਰਗਦਰਸ਼ਨ ਲਈ ਆਪਣੇ ਲੱਛਣ ਚੁਣੋ',
+  'select_symptoms': 'ਲੱਛਣ ਚੁਣੋ',
+  'common_symptoms': 'ਆਮ ਲੱਛਣ',
+  'selected_symptoms': 'ਚੁਣੇ ਗਏ ਲੱਛਣ',
+  'check_now': 'ਹੁਣੇ ਜਾਂਚੋ',
+  'ai_result': 'AI ਮੁਲਾਂਕਣ',
+  'ai_disclaimer': 'ਇਹ ਸਿਰਫ਼ AI ਮਾਰਗਦਰਸ਼ਨ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਸਹੀ ਨਿਦਾਨ ਲਈ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।',
+  'fever': 'ਬੁਖਾਰ',
+  'headache': 'ਸਿਰ ਦਰਦ',
+  'cough': 'ਖੰਘ',
+  'cold': 'ਜ਼ੁਕਾਮ',
+  'body_pain': 'ਸਰੀਰ ਦਰਦ',
+  'stomach_pain': 'ਪੇਟ ਦਰਦ',
+  'vomiting': 'ਉਲਟੀ',
+  'diarrhea': 'ਦਸਤ',
+  'fatigue': 'ਥਕਾਵਟ',
+  'sore_throat': 'ਗਲੇ ਵਿੱਚ ਖਰਾਸ਼',
+  'breathing_difficulty': 'ਸਾਹ ਲੈਣ ਵਿੱਚ ਮੁਸ਼ਕਲ',
+  'chest_pain': 'ਛਾਤੀ ਵਿੱਚ ਦਰਦ',
+  'skin_rash': 'ਚਮੜੀ \'ਤੇ ਧੱਫੜ',
+  'joint_pain': 'ਜੋੜਾਂ ਦਾ ਦਰਦ',
+  'dizziness': 'ਚੱਕਰ ਆਉਣਾ',
+  'loss_of_appetite': 'ਭੁੱਖ ਨਾ ਲੱਗਣਾ',
+
+  // ── AI Results (mock) ──
+  'ai_result_severe': 'ਤੁਹਾਡੇ ਲੱਛਣਾਂ ਦੇ ਆਧਾਰ \'ਤੇ, ਇਹ ਵਾਇਰਲ ਇਨਫੈਕਸ਼ਨ ਹੋ ਸਕਦੀ ਹੈ। '
+      'ਕਿਰਪਾ ਕਰਕੇ 24 ਘੰਟਿਆਂ ਅੰਦਰ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ। ਪਾਣੀ ਪੀਓ ਅਤੇ ਆਰਾਮ ਕਰੋ। '
+      'ਜੇ ਸਾਹ ਲੈਣ ਵਿੱਚ ਮੁਸ਼ਕਲ ਹੋਵੇ, ਤਾਂ ਤੁਰੰਤ ਡਾਕਟਰੀ ਮਦਦ ਲਓ।',
+  'ai_result_moderate': 'ਤੁਹਾਡੇ ਲੱਛਣ ਆਮ ਜ਼ੁਕਾਮ ਜਾਂ ਹਲਕੀ ਇਨਫੈਕਸ਼ਨ ਦੱਸਦੇ ਹਨ। '
+      'ਆਰਾਮ ਕਰੋ, ਗਰਮ ਤਰਲ ਪਦਾਰਥ ਪੀਓ, ਅਤੇ 2-3 ਦਿਨ ਧਿਆਨ ਰੱਖੋ। '
+      'ਜੇ ਲੱਛਣ ਵਧਣ, ਤਾਂ ਕਿਰਪਾ ਕਰਕੇ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।',
+  'ai_result_mild': 'ਤੁਹਾਡਾ ਲੱਛਣ ਹਲਕਾ ਜਾਪਦਾ ਹੈ। ਅਗਲੇ '
+      '24-48 ਘੰਟਿਆਂ ਵਿੱਚ ਬਦਲਾਅ \'ਤੇ ਧਿਆਨ ਰੱਖੋ। ਸਫਾਈ ਰੱਖੋ ਅਤੇ ਪਾਣੀ ਪੀਓ। '
+      'ਜੇ ਹਾਲਤ ਬਣੀ ਰਹੇ ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।',
+
+  // ── Offline Records ──
+  'health_records': 'ਸਿਹਤ ਰਿਕਾਰਡ',
+  'saved_offline': 'ਔਫ਼ਲਾਈਨ ਸੰਭਾਲਿਆ',
+  'prescriptions': 'ਨੁਸਖੇ',
+  'lab_reports': 'ਲੈਬ ਰਿਪੋਰਟਾਂ',
+  'vaccination': 'ਟੀਕਾਕਰਨ',
+  'no_records': 'ਅਜੇ ਕੋਈ ਰਿਕਾਰਡ ਨਹੀਂ',
+  'add_record': 'ਰਿਕਾਰਡ ਜੋੜੋ',
+  'record_date': 'ਮਿਤੀ',
+  'record_doctor': 'ਡਾਕਟਰ',
+  'record_diagnosis': 'ਨਿਦਾਨ',
+  'notes': 'ਨੋਟਸ',
+  'add_record_coming_soon': 'ਰਿਕਾਰਡ ਜੋੜਨ ਦੀ ਸੁਵਿਧਾ ਜਲਦੀ ਆ ਰਹੀ ਹੈ',
+
+  // ── Medicine Availability ──
+  'medicine_availability': 'ਦਵਾਈ ਉਪਲਬਧਤਾ',
+  'search_medicine': 'ਦਵਾਈ ਦਾ ਨਾਮ ਖੋਜੋ',
+  'nearby_stores': 'ਨੇੜਲੀਆਂ ਦੁਕਾਨਾਂ',
+  'available': 'ਉਪਲਬਧ',
+  'unavailable': 'ਅਣਉਪਲਬਧ',
+  'price': 'ਕੀਮਤ',
+  'generic_available': 'ਜੈਨਰਿਕ ਉਪਲਬਧ',
+  'store_name': 'ਦੁਕਾਨ ਦਾ ਨਾਮ',
+  'distance': 'ਦੂਰੀ',
+  'no_medicines_found': 'ਕੋਈ ਦਵਾਈ ਨਹੀਂ ਮਿਲੀ',
+
+  // ── Profile ──
+  'profile': 'ਪ੍ਰੋਫ਼ਾਈਲ',
+  'edit_profile': 'ਪ੍ਰੋਫ਼ਾਈਲ ਸੰਪਾਦਿਤ ਕਰੋ',
+  'full_name': 'ਪੂਰਾ ਨਾਮ',
+  'email': 'ਈਮੇਲ',
+  'village': 'ਪਿੰਡ / ਸ਼ਹਿਰ',
+  'language': 'ਭਾਸ਼ਾ',
+  'theme': 'ਥੀਮ',
+  'dark_mode': 'ਡਾਰਕ ਮੋਡ',
+  'notifications': 'ਸੂਚਨਾਵਾਂ',
+  'help_support': 'ਮਦਦ ਅਤੇ ਸਹਾਇਤਾ',
+  'about': 'ਬਾਰੇ',
+  'logout': 'ਲਾਗਆਊਟ',
+  'version': 'ਵਰਜ਼ਨ',
+  'notifications_coming_soon': 'ਸੂਚਨਾ ਸੈਟਿੰਗਾਂ ਜਲਦੀ ਆ ਰਹੀਆਂ ਹਨ',
+  'help_coming_soon': 'ਮਦਦ ਅਤੇ ਸਹਾਇਤਾ ਜਲਦੀ ਆ ਰਹੀ ਹੈ',
+  'logout_confirm': 'ਕੀ ਤੁਸੀਂ ਲਾਗਆਊਟ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?',
+  'logout_confirm_desc': 'ਤੁਹਾਨੂੰ ਦੁਬਾਰਾ ਲਾਗਿਨ ਕਰਨਾ ਪਵੇਗਾ।',
+
+  // ── Error Boundary & Recovery ──
+  'something_went_wrong': 'ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ',
+  'error_try_again': 'ਇੱਕ ਅਣਕਿਆਸੀ ਗਲਤੀ ਹੋਈ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।',
+  'no_internet': 'ਕੋਈ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਨਹੀਂ',
+  'connection_restored': 'ਕਨੈਕਸ਼ਨ ਬਹਾਲ ਹੋਇਆ',
+  'syncing_data': 'ਡੇਟਾ ਸਿੰਕ ਹੋ ਰਿਹਾ ਹੈ...',
+  'sync_complete': 'ਸਿੰਕ ਪੂਰਾ',
+  'sync_failed': 'ਸਿੰਕ ਅਸਫ਼ਲ। ਬਾਅਦ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰਾਂਗੇ।',
+  'data_saved_locally': 'ਡੇਟਾ ਸਥਾਨਕ ਤੌਰ \'ਤੇ ਸੰਭਾਲਿਆ ਗਿਆ',
+  'tap_to_retry': 'ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ',
+  'page_not_found': 'ਪੇਜ ਨਹੀਂ ਮਿਲਿਆ',
+  'go_home': 'ਹੋਮ ਜਾਓ',
+};

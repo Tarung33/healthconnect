@@ -173,10 +173,10 @@ class HomeScreen extends StatelessWidget {
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: [
-                          _healthTipCard('💧', 'Drink 8 glasses of water daily', AppColors.primary),
-                          _healthTipCard('🏃', 'Walk 30 minutes every day', AppColors.secondary),
-                          _healthTipCard('🍎', 'Eat seasonal fruits & vegetables', AppColors.accent),
-                          _healthTipCard('😴', 'Get 7-8 hours of sleep', AppColors.success),
+                          _healthTipCard(Icons.water_drop_rounded, t('health_tip_water'), AppColors.primary),
+                          _healthTipCard(Icons.directions_walk_rounded, t('health_tip_walk'), AppColors.secondary),
+                          _healthTipCard(Icons.local_dining_rounded, t('health_tip_fruits'), AppColors.accent),
+                          _healthTipCard(Icons.bedtime_rounded, t('health_tip_sleep'), AppColors.success),
                         ],
                       ),
                     ),
@@ -214,7 +214,7 @@ class HomeScreen extends StatelessWidget {
                   Text('Dr. Priya Sharma',
                     style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 2),
-                  Text('General Physician • Tomorrow, 10:00 AM',
+                  Text('${t('general_physician')} • Tomorrow, 10:00 AM',
                     style: Theme.of(context).textTheme.bodySmall),
                 ],
               ),
@@ -234,7 +234,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _healthTipCard(String emoji, String tip, Color color) {
+  Widget _healthTipCard(IconData icon, String tip, Color color) {
     return Container(
       width: 200,
       margin: const EdgeInsets.only(right: 12),
@@ -252,7 +252,15 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 32)),
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: color, size: 26),
+          ),
           const SizedBox(height: 10),
           Text(tip, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
         ],

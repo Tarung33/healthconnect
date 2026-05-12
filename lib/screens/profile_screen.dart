@@ -8,6 +8,7 @@ import '../providers/auth_provider.dart';
 import '../providers/theme_provider.dart';
 import '../providers/language_provider.dart';
 import '../screens/language_selection_screen.dart';
+import '../screens/voice_emr_screen.dart';
 
 /// ============================================================
 /// PROFILE SCREEN — User info, settings, and logout
@@ -117,7 +118,7 @@ class ProfileScreen extends StatelessWidget {
               title: t('notifications'),
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Notifications settings coming soon')),
+                  SnackBar(content: Text(t('notifications_coming_soon'))),
                 );
               },
             ),
@@ -129,7 +130,7 @@ class ProfileScreen extends StatelessWidget {
               title: t('help_support'),
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Help & Support coming soon')),
+                  SnackBar(content: Text(t('help_coming_soon'))),
                 );
               },
             ),
@@ -140,6 +141,35 @@ class ProfileScreen extends StatelessWidget {
               icon: Icons.info_outline,
               title: t('about'),
               subtitle: '${t('version')} ${AppConstants.appVersion}',
+            ),
+
+            const SizedBox(height: 16),
+            const Divider(),
+            const SizedBox(height: 8),
+
+            // ── Doctor Mode: Voice to EMR ──
+            _settingsTile(
+              context,
+              icon: Icons.mic_external_on,
+              title: 'Doctor Mode: Voice EMR',
+              subtitle: 'Real-time speech to medical record',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const VoiceEmrScreen()),
+                );
+              },
+            ),
+
+            // ── Admin Dashboard ──
+            _settingsTile(
+              context,
+              icon: Icons.admin_panel_settings,
+              title: 'Admin Dashboard',
+              subtitle: 'Rural Healthcare Analytics',
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.adminDashboard);
+              },
             ),
 
             const SizedBox(height: 16),

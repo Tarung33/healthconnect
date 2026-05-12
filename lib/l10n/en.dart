@@ -18,11 +18,24 @@ const Map<String, String> en = {
   'ok': 'OK',
   'yes': 'Yes',
   'no': 'No',
+  'close': 'Close',
+  'delete': 'Delete',
+  'edit': 'Edit',
+  'done': 'Done',
+  'error': 'Error',
+  'success': 'Success',
+  'warning': 'Warning',
+  'confirm': 'Confirm',
+  'submit': 'Submit',
+  'update': 'Update',
+  'all': 'All',
+  'found': 'found',
 
   // ── Connectivity ──
   'online': 'Online',
   'offline': 'You are offline. Data saved locally.',
   'offline_short': 'Offline',
+  'synced_online': 'Synced online',
 
   // ── Onboarding ──
   'onboarding_title_1': 'Connect with Doctors',
@@ -36,6 +49,7 @@ const Map<String, String> en = {
   // ── Language Selection ──
   'select_language': 'Select Your Language',
   'select_language_desc': 'Choose the language you are comfortable with',
+  'language_changed': 'Language changed',
 
   // ── Login / Register ──
   'login': 'Login',
@@ -50,6 +64,9 @@ const Map<String, String> en = {
   'login_with_aadhaar': 'Continue with Aadhaar / ABHA ID',
   'create_account': 'Don\'t have an account? Register',
   'have_account': 'Already have an account? Login',
+  'invalid_otp': 'Invalid OTP',
+  'invalid_phone': 'Invalid phone number',
+  'mock_otp_hint': 'Mock OTP: 123456',
 
   // ── Aadhaar Login ──
   'aadhaar_login': 'Aadhaar / Health ID Login',
@@ -59,6 +76,7 @@ const Map<String, String> en = {
   'enter_abha': 'Enter your ABHA ID',
   'verify_identity': 'Verify Identity',
   'aadhaar_note': 'Your Aadhaar data is secure and encrypted',
+  'verification_failed': 'Verification failed. Please check your details.',
 
   // ── Home Dashboard ──
   'good_morning': 'Good Morning',
@@ -74,6 +92,12 @@ const Map<String, String> en = {
   'no_appointments': 'No upcoming appointments',
   'health_tips': 'Health Tips',
   'book_appointment': 'Book Appointment',
+
+  // ── Health Tips ──
+  'health_tip_water': 'Drink 8 glasses of water daily',
+  'health_tip_walk': 'Walk 30 minutes every day',
+  'health_tip_fruits': 'Eat seasonal fruits & vegetables',
+  'health_tip_sleep': 'Get 7-8 hours of sleep',
 
   // ── Bottom Navigation ──
   'nav_home': 'Home',
@@ -98,6 +122,8 @@ const Map<String, String> en = {
   'pediatrician': 'Pediatrician',
   'gynecologist': 'Gynecologist',
   'dermatologist': 'Dermatologist',
+  'no_doctors_found': 'No doctors found',
+  'booking_with': 'Booking with',
 
   // ── AI Symptom Checker ──
   'symptom_checker': 'AI Symptom Checker',
@@ -125,6 +151,17 @@ const Map<String, String> en = {
   'dizziness': 'Dizziness',
   'loss_of_appetite': 'Loss of Appetite',
 
+  // ── AI Results (mock) ──
+  'ai_result_severe': 'Based on your symptoms, this could indicate a viral infection. '
+      'Please consult a doctor within 24 hours. Stay hydrated and rest. '
+      'If you experience breathing difficulty, seek immediate medical attention.',
+  'ai_result_moderate': 'Your symptoms suggest a common cold or mild infection. '
+      'Take rest, drink warm fluids, and monitor for 2-3 days. '
+      'If symptoms worsen, please consult a doctor.',
+  'ai_result_mild': 'Your symptom appears mild. Monitor for changes over the next '
+      '24-48 hours. Maintain good hygiene and stay hydrated. '
+      'Consult a doctor if the condition persists.',
+
   // ── Offline Records ──
   'health_records': 'Health Records',
   'saved_offline': 'Saved Offline',
@@ -136,6 +173,8 @@ const Map<String, String> en = {
   'record_date': 'Date',
   'record_doctor': 'Doctor',
   'record_diagnosis': 'Diagnosis',
+  'notes': 'Notes',
+  'add_record_coming_soon': 'Add record feature coming soon',
 
   // ── Medicine Availability ──
   'medicine_availability': 'Medicine Availability',
@@ -147,6 +186,7 @@ const Map<String, String> en = {
   'generic_available': 'Generic Available',
   'store_name': 'Store Name',
   'distance': 'Distance',
+  'no_medicines_found': 'No medicines found',
 
   // ── Profile ──
   'profile': 'Profile',
@@ -162,4 +202,21 @@ const Map<String, String> en = {
   'about': 'About',
   'logout': 'Logout',
   'version': 'Version',
+  'notifications_coming_soon': 'Notifications settings coming soon',
+  'help_coming_soon': 'Help & Support coming soon',
+  'logout_confirm': 'Are you sure you want to logout?',
+  'logout_confirm_desc': 'You will need to login again.',
+
+  // ── Error Boundary & Recovery ──
+  'something_went_wrong': 'Something went wrong',
+  'error_try_again': 'An unexpected error occurred. Please try again.',
+  'no_internet': 'No internet connection',
+  'connection_restored': 'Connection restored',
+  'syncing_data': 'Syncing data...',
+  'sync_complete': 'Sync complete',
+  'sync_failed': 'Sync failed. Will retry later.',
+  'data_saved_locally': 'Data saved locally',
+  'tap_to_retry': 'Tap to retry',
+  'page_not_found': 'Page not found',
+  'go_home': 'Go Home',
 };

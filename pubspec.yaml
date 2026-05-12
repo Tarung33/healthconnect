@@ -28,7 +28,7 @@ dependencies:
   google_fonts: ^6.1.0
 
   # Internationalization utilities
-  intl: ^0.19.0
+  intl: ^0.20.2
 
   # Onboarding page indicator
   smooth_page_indicator: ^1.1.0
@@ -36,18 +36,26 @@ dependencies:
   # Loading shimmer effect (perceived performance)
   shimmer: ^3.0.0
 
-  # Cached images for offline support
-  cached_network_image: ^3.3.1
+  # Local database for offline sync
+  sqflite: ^2.4.2+1
+  path: ^1.9.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
 
+# Fix: objective_c native hook fails with spaces in Windows path
+# (C:\Users\Khatijatul Kubra\...). Override to an older version that doesn't use it.
+dependency_overrides:
+  path_provider_foundation: 2.3.2
+
 flutter:
+  generate: true
   uses-material-design: true
 
   # Asset directories — add actual assets here later
   # assets:
   #   - assets/images/
   #   - assets/icons/
+

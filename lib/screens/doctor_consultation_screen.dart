@@ -4,6 +4,7 @@ import '../l10n/app_localizations.dart';
 import '../models/doctor_model.dart';
 import '../widgets/doctor_card.dart';
 import '../widgets/section_header.dart';
+import 'live_consultation_screen.dart';
 
 /// ============================================================
 /// DOCTOR CONSULTATION SCREEN — Browse & book doctors
@@ -49,11 +50,10 @@ class _DoctorConsultationScreenState extends State<DoctorConsultationScreen> {
   }
 
   void _onBookDoctor(DoctorModel doctor) {
-    // TODO: Navigate to booking flow or initiate call
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Booking with ${doctor.name}... (Mock)'),
-        behavior: SnackBarBehavior.floating,
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LiveConsultationScreen(doctor: doctor),
       ),
     );
   }
@@ -97,7 +97,7 @@ class _DoctorConsultationScreenState extends State<DoctorConsultationScreen> {
           // ── Doctor List ──
           Expanded(
             child: _filteredDoctors.isEmpty
-                ? Center(child: Text('No doctors found', style: Theme.of(context).textTheme.bodyLarge))
+                ? Center(child: Text(t('no_doctors_found'), style: Theme.of(context).textTheme.bodyLarge))
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: AppConstants.horizontalPadding),
                     itemCount: _filteredDoctors.length,

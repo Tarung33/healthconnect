@@ -1,0 +1,23 @@
+# ============================================================
+# Flutter Localization Configuration
+# ============================================================
+# This file configures Flutter's gen-l10n tool for generating
+# type-safe localizations from ARB files.
+#
+# Note: This project uses a lightweight custom localization
+# system (lib/l10n/app_localizations.dart) instead of the
+# generated approach. These ARB files are provided as reference
+# for teams that prefer the generated approach.
+#
+# To use generated localizations instead:
+# 1. Run: flutter gen-l10n
+# 2. Import generated files in your app
+# 3. Replace t('key') calls with AppLocalizations.of(context).key
+# ============================================================
+
+arb-dir: lib/l10n/arb
+template-arb-file: app_en.arb
+output-localization-file: app_localizations_generated.dart
+output-class: AppLocalizationsGenerated
+nullable-getter: false
+output-dir: lib/l10n/generated

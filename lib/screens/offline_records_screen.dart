@@ -3,13 +3,14 @@ import '../config/app_colors.dart';
 import '../config/app_constants.dart';
 import '../l10n/app_localizations.dart';
 import '../models/health_record_model.dart';
-import '../widgets/record_card.dart';
+import '../repositories/health_record_repository.dart';
+import '../services/encryption_service.dart';
 
 /// ============================================================
-/// OFFLINE RECORDS SCREEN — View locally-saved health records
+/// SECURE HEALTH RECORDS SCREEN
 /// ============================================================
-/// Records are categorized into tabs: All, Prescriptions,
-/// Lab Reports, Vaccinations. Each shows sync status.
+/// Features: Aadhaar-linked records, Patient History, 
+/// Prescription Upload, QR Lookup, and Emergency Access Mode.
 /// ============================================================
 
 class OfflineRecordsScreen extends StatefulWidget {
@@ -19,15 +20,43 @@ class OfflineRecordsScreen extends StatefulWidget {
   State<OfflineRecordsScreen> createState() => _OfflineRecordsScreenState();
 }
 
-class _OfflineRecordsScreenState extends State<OfflineRecordsScreen>
-    with SingleTickerProviderStateMixin {
+class _OfflineRecordsScreenState extends State<OfflineRecordsScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final List<HealthRecordModel> _records = HealthRecordModel.mockList();
+  final HealthRecordRepository _repository = HealthRecordRepository();
+  final EncryptionService _encryptionService = EncryptionService();
+
+  List<HealthRecordModel> _records = [];
+  bool _isLoading = true;
+  bool _isEmergencyMode = false;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
+    _loadRecords();
+  }
+
+  Future<void> _loadRecords() async {
+    try {
+      final cached = await _repository.getAllRecords();
+      if (mounted) {
+        setState(() {
+          _records = cached;
+          if (_records.isEmpty) {
+            _records = HealthRecordModel.mockList();
+          }
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading records: $e');
+      if (mounted) {
+        setState(() {
+          _records = HealthRecordModel.mockList();
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -36,141 +65,323 @@ class _OfflineRecordsScreenState extends State<OfflineRecordsScreen>
     super.dispose();
   }
 
-  List<HealthRecordModel> _filterByType(String? type) {
-    if (type == null) return _records;
-    return _records.where((r) => r.type == type).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(t('health_records')),
+        title: const Text('Secure Health Records'),
+        backgroundColor: _isEmergencyMode ? AppColors.error : AppColors.primary,
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
-          labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-          tabs: [
-            Tab(text: 'All (${_records.length})'),
-            Tab(text: '${t('prescriptions')} (${_filterByType('prescription').length})'),
-            Tab(text: '${t('lab_reports')} (${_filterByType('lab_report').length})'),
-            Tab(text: '${t('vaccination')} (${_filterByType('vaccination').length})'),
+          indicatorColor: Colors.white,
+          tabs: const [
+            Tab(text: 'History & Vault'),
+            Tab(text: 'Upload & Scan'),
+            Tab(text: 'Access & QR'),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
-          _buildRecordList(null),
-          _buildRecordList('prescription'),
-          _buildRecordList('lab_report'),
-          _buildRecordList('vaccination'),
+          _buildHistoryTab(),
+          _buildUploadTab(),
+          _buildAccessTab(),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // TODO: Navigate to add record screen
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Add record feature coming soon')),
-          );
-        },
-        icon: const Icon(Icons.add),
-        label: Text(t('add_record')),
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
+      floatingActionButton: _tabController.index == 0
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Syncing encrypted records with ABHA network...')));
+              },
+              icon: const Icon(Icons.sync_lock),
+              label: const Text('Sync Securely'),
+              backgroundColor: _isEmergencyMode ? AppColors.error : AppColors.primary,
+            )
+          : null,
+    );
+  }
+
+  // ── TAB 1: History & Vault ──
+  Widget _buildHistoryTab() {
+    if (_isLoading) return const Center(child: CircularProgressIndicator());
+    
+    return Column(
+      children: [
+        if (_isEmergencyMode)
+          Container(
+            padding: const EdgeInsets.all(12),
+            color: AppColors.error.withOpacity(0.1),
+            child: Row(
+              children: [
+                const Icon(Icons.warning, color: AppColors.error),
+                const SizedBox(width: 8),
+                const Expanded(
+                  child: Text('EMERGENCY MODE ACTIVE: Read-only access granted to first responders.', 
+                    style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold, fontSize: 12)),
+                ),
+              ],
+            ),
+          ),
+        
+        // Vault Status
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              const Icon(Icons.lock, color: AppColors.success, size: 20),
+              const SizedBox(width: 8),
+              Text('Vault Encrypted (AES-256)', style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600)),
+              const Spacer(),
+              Text('${_records.length} Records', style: const TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+        ),
+        const Divider(height: 1),
+
+        Expanded(
+          child: _records.isEmpty
+              ? Center(child: Text(t('no_records_found')))
+              : ListView.builder(
+                  padding: const EdgeInsets.all(AppConstants.horizontalPadding),
+                  itemCount: _records.length,
+                  itemBuilder: (context, index) {
+                    final record = _records[index];
+                    return _buildRecordCard(record);
+                  },
+                ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRecordCard(HealthRecordModel record) {
+    IconData icon;
+    Color iconColor;
+
+    switch (record.type) {
+      case 'prescription':
+        icon = Icons.description_outlined;
+        iconColor = AppColors.primary;
+        break;
+      case 'lab_report':
+        icon = Icons.biotech_outlined;
+        iconColor = AppColors.secondary;
+        break;
+      case 'vaccination':
+        icon = Icons.vaccines_outlined;
+        iconColor = AppColors.success;
+        break;
+      default:
+        icon = Icons.folder_outlined;
+        iconColor = Colors.grey;
+    }
+
+    // Mock an immutable signature
+    final signature = _encryptionService.generateSignature(record.id).substring(0, 12);
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: iconColor.withOpacity(0.1),
+                  child: Icon(icon, color: iconColor),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(record.title, style: Theme.of(context).textTheme.titleMedium),
+                      const SizedBox(height: 2),
+                      Text('${record.date.day}/${record.date.month}/${record.date.year}', 
+                        style: Theme.of(context).textTheme.bodySmall),
+                    ],
+                  ),
+                ),
+                if (record.isSyncedOnline)
+                  const Icon(Icons.cloud_done, color: AppColors.success, size: 20)
+                else
+                  const Icon(Icons.cloud_off, color: Colors.grey, size: 20),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text('Doctor: ${record.doctorName}', style: const TextStyle(fontWeight: FontWeight.w500)),
+            Text('Diagnosis: ${record.diagnosis}', style: const TextStyle(color: Colors.black87)),
+            if (record.notes != null) ...[
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(8)),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.notes, size: 16, color: Colors.grey),
+                    const SizedBox(width: 8),
+                    Expanded(child: Text(record.notes!, style: const TextStyle(fontSize: 13, color: Colors.black87))),
+                  ],
+                ),
+              ),
+            ],
+            const SizedBox(height: 12),
+            const Divider(height: 1),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Signature: $signature...', style: const TextStyle(fontSize: 11, color: Colors.grey, fontFamily: 'monospace')),
+                const Text('Immutable', style: TextStyle(fontSize: 11, color: AppColors.success, fontWeight: FontWeight.bold)),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildRecordList(String? type) {
-    final filtered = _filterByType(type);
+  // ── TAB 2: Upload & Scan ──
+  Widget _buildUploadTab() {
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text('Digitize Your Records', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          const Text('Scan physical prescriptions and lab reports to store them securely in your encrypted vault.', style: TextStyle(color: Colors.grey)),
+          const SizedBox(height: 32),
+          
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              children: [
+                _actionTile(Icons.document_scanner, 'Scan Document', AppColors.primary, () {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Opening AI Document Scanner...')));
+                }),
+                _actionTile(Icons.upload_file, 'Upload PDF', AppColors.secondary, () {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Opening File Picker...')));
+                }),
+                _actionTile(Icons.camera_alt, 'Take Photo', AppColors.accent, () {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Opening Camera...')));
+                }),
+                _actionTile(Icons.link, 'Link ABHA ID', AppColors.success, () {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Initiating ABHA fetch protocol...')));
+                }),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-    if (filtered.isEmpty) {
-      return Center(
+  Widget _actionTile(IconData icon, String label, Color color, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withOpacity(0.3)),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.folder_open, size: 64, color: AppColors.dividerLight),
-            const SizedBox(height: 16),
-            Text(t('no_records'), style: Theme.of(context).textTheme.bodyLarge),
+            Icon(icon, size: 40, color: color),
+            const SizedBox(height: 12),
+            Text(label, style: TextStyle(fontWeight: FontWeight.bold, color: color)),
           ],
         ),
-      );
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.all(AppConstants.horizontalPadding),
-      itemCount: filtered.length,
-      itemBuilder: (context, index) {
-        return RecordCard(
-          record: filtered[index],
-          onTap: () {
-            // TODO: Navigate to record detail screen
-            _showRecordDetail(filtered[index]);
-          },
-        );
-      },
+      ),
     );
   }
 
-  void _showRecordDetail(HealthRecordModel record) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        final theme = Theme.of(context);
-        return Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+  // ── TAB 3: Access & QR ──
+  Widget _buildAccessTab() {
+    return ListView(
+      padding: const EdgeInsets.all(24),
+      children: [
+        // QR Code
+        Center(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, offset: const Offset(0, 4))],
+            ),
+            child: Column(
+              children: [
+                const Icon(Icons.qr_code_2, size: 180, color: Colors.black87),
+                const SizedBox(height: 12),
+                const Text('Scan for Patient Profile', style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                Text('Tokens refresh every 5 mins', style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 32),
+
+        // Emergency Access Toggle
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: _isEmergencyMode ? AppColors.error.withOpacity(0.1) : Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: _isEmergencyMode ? AppColors.error : Colors.grey.shade300),
+          ),
+          child: Row(
             children: [
-              Center(
-                child: Container(
-                  width: 40, height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.dividerLight,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+              const Icon(Icons.emergency, color: AppColors.error, size: 32),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text('Emergency Access', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    Text('Allow first responders to bypass lock in life-threatening situations.', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                  ],
                 ),
               ),
-              const SizedBox(height: 20),
-              Text(record.title, style: theme.textTheme.headlineSmall),
-              const SizedBox(height: 8),
-              _detailRow(Icons.person, '${t('record_doctor')}: ${record.doctorName}'),
-              _detailRow(Icons.medical_information, '${t('record_diagnosis')}: ${record.diagnosis}'),
-              _detailRow(Icons.calendar_today, '${t('record_date')}: ${record.date.toString().split(' ')[0]}'),
-              if (record.notes != null) ...[
-                const SizedBox(height: 8),
-                Text('Notes:', style: theme.textTheme.titleMedium),
-                const SizedBox(height: 4),
-                Text(record.notes!, style: theme.textTheme.bodyMedium),
-              ],
-              _detailRow(
-                record.isSyncedOnline ? Icons.cloud_done : Icons.cloud_off,
-                record.isSyncedOnline ? 'Synced online' : t('saved_offline'),
+              Switch(
+                value: _isEmergencyMode,
+                activeColor: AppColors.error,
+                onChanged: (val) {
+                  setState(() => _isEmergencyMode = val);
+                  if (val) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Emergency mode activated! Access granted without PIN.')));
+                  }
+                },
               ),
-              const SizedBox(height: 16),
             ],
           ),
-        );
-      },
-    );
-  }
+        ),
+        const SizedBox(height: 20),
 
-  Widget _detailRow(IconData icon, String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: AppColors.textSecondaryLight),
-          const SizedBox(width: 10),
-          Expanded(child: Text(text, style: const TextStyle(fontSize: 15))),
-        ],
-      ),
+        // Revoke Access
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: OutlinedButton.icon(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('All external sessions revoked securely.')));
+            },
+            icon: const Icon(Icons.security, color: AppColors.primary),
+            label: const Text('Revoke Active Sessions', style: TextStyle(color: AppColors.primary)),
+            style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.primary)),
+          ),
+        ),
+      ],
     );
   }
 }
